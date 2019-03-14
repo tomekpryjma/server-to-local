@@ -10,6 +10,7 @@
 --local-mysql-pass="localPasswordMYSQL" \
 --remote-host="server" \
 --remote-ssh-user="admin" \
+--remote-domain="/srv/mysite.com" \
 --remote-mysql-user="remote_mysql_root" \
 --remote-mysql-pass="ujnbouascoUASCouw987cwa" \
 --remote-mysql-db="remote_db";
