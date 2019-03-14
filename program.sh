@@ -3,41 +3,22 @@
 set -o errexit
 set -o nounset
 
-# Default Globals
-LOCAL_DIR=''
-LOCAL_MYSQL_USER=''
-LOCAL_MYSQL_PASS=''
-
-REMOTE_HOST=''
-REMOTE_SSH_USER='' # Password will have to be entered upon script start bu user.
-REMOTE_MYSQL_USER=''
-REMOTE_MYSQL_PASS=''
-REMOTE_MYSQL_DB=''
-
-function clean_up
-{
-    unset LOCAL_DIR
-    unset LOCAL_MYSQL_USER
-    unset LOCAL_MYSQL_PASS
-
-    unset REMOTE_HOST
-    unset REMOTE_SSH_USER
-    unset REMOTE_MYSQL_USER
-    unset REMOTE_MYSQL_PASS
-    unset REMOTE_MYSQL_DB
-}
+source ./globals.sh
+source ./functions.sh
 
 # Run
 if [ "$#" -eq 0 ]; then
-        printf 'This script needs options to be parsed into it.'
-        echo
-        printf 'Type '"\"${0##*/} -h\""
-        printf ' to get all available options.'
+    introduction
+    auto_setup
     else
 
     for i in "$@"
     do
         case $i in
+            # Help
+            -h|--help)
+                show_help
+                ;;
 
             # Localhost globals
             -d=*|--local-dir=*)
@@ -56,13 +37,18 @@ if [ "$#" -eq 0 ]; then
                 ;;
 
             # Remote globals
-            -h=*|--remote-host=*)
+            -r=*|--remote-host=*)
                 REMOTE_HOST="${i#*=}"
                 shift
                 ;;
 
             -w=*|--remote-ssh-user=*)
                 REMOTE_SSH_USER="${i#*=}"
+                shift
+                ;;
+
+            -b=*|--remote-domain=*)
+                REMOTE_DOMAIN="${i#*=}"
                 shift
                 ;;
 
@@ -84,20 +70,25 @@ if [ "$#" -eq 0 ]; then
             # Unknown value
             *)
                 ;;
-
-
         esac
     done
+fi
 
-    echo "LOCAL_DIR         = ${LOCAL_DIR}"
-    echo "LOCAL_MYSQL_USER  = ${LOCAL_MYSQL_USER}"
-    echo "LOCAL_MYSQL_PASS  = ${LOCAL_MYSQL_PASS}"
+# ===== Entry Point =====
+# Check over the core variables that are necessary for the script to work.
+# Will not check for MySQL passwords as it is possible to have
+# a blank MySQL password.
+if [[ -z $LOCAL_DIR || -z $LOCAL_MYSQL_USER || -z $REMOTE_HOST || -z $REMOTE_SSH_USER || -z $REMOTE_DOMAIN || -z $REMOTE_MYSQL_USER || -z $REMOTE_MYSQL_DB ]]; then
 
-    echo "REMOTE_HOST       = ${REMOTE_HOST}"
-    echo "REMOTE_SSH_USER   = ${REMOTE_SSH_USER}" # Password will have to be entered upon script start bu user.
-    echo "REMOTE_MYSQL_USER = ${REMOTE_MYSQL_USER}"
-    echo "REMOTE_MYSQL_PASS = ${REMOTE_MYSQL_PASS}"
-    echo "REMOTE_MYSQL_DB   = ${REMOTE_MYSQL_DB}"
+    echo -e "${RED}One or more core variables is undefined!${NONE}"
+    echo -e "${RED}Run the program with the -h or --help flag${NONE}"
+    echo -e "${RED}to see a full list of the necessary variables.${NONE}"
+
+else
+    echo
+    main
+
+    clean_up
 fi
 
 exit
