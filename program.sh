@@ -47,6 +47,11 @@ if [ "$#" -eq 0 ]; then
                 shift
                 ;;
 
+            -b=*|--remote-webroot=*)
+                REMOTE_WEBROOT="${i#*=}"
+                shift
+                ;;
+
             -b=*|--remote-domain=*)
                 REMOTE_DOMAIN="${i#*=}"
                 shift

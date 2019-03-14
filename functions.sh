@@ -43,6 +43,8 @@ function details_dump
     echo "REMOTE_HOST       = ${REMOTE_HOST}"
     echo "REMOTE_SSH_USER   = ${REMOTE_SSH_USER}" # Password will have to be entered upon script start bu user.
     echo "REMOTE_MYSQL_USER = ${REMOTE_MYSQL_USER}"
+    echo "REMOTE_WEBROOT    = ${REMOTE_WEBROOT}"
+    echo "REMOTE_DOMAIN     = ${REMOTE_DOMAIN}"
     echo "REMOTE_MYSQL_PASS = ${REMOTE_MYSQL_PASS}"
     echo "REMOTE_MYSQL_DB   = ${REMOTE_MYSQL_DB}"
 }
@@ -99,6 +101,7 @@ function clean_up
 
     unset REMOTE_HOST
     unset REMOTE_SSH_USER
+    unset REMOTE_WEBROOT
     unset REMOTE_DOMAIN
     unset REMOTE_MYSQL_USER
     unset REMOTE_MYSQL_PASS

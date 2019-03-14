@@ -7,6 +7,7 @@ LOCAL_MYSQL_PASS=''
 
 REMOTE_HOST=''
 REMOTE_SSH_USER='' # Password will have to be entered upon script start bu user.
+REMOTE_WEBROOT=''
 REMOTE_DOMAIN=''
 REMOTE_MYSQL_USER=''
 REMOTE_MYSQL_PASS=''
